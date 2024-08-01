@@ -1,113 +1,169 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:size-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import React, { useState, DragEvent, useEffect } from 'react';
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+import { 
+  FaCarrot, FaAppleAlt, FaFish, FaEgg, FaCheese, FaBreadSlice, 
+  FaPepperHot, FaLemon, FaCoffee, FaIceCream
+} from 'react-icons/fa';
+import { 
+  GiMeat, GiMushroomGills, GiTomato, GiPotato, GiCorn, 
+  GiAvocado, GiChocolateBar, GiHoneycomb, GiStrawberry, GiGrapes 
+} from 'react-icons/gi';
 
-      <div className="relative z-[-1] flex place-items-center before:absolute before:h-[300px] before:w-full before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 sm:before:w-[480px] sm:after:w-[240px] before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-sm opacity-50">
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className="mb-3 text-2xl font-semibold">
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className="m-0 max-w-[30ch] text-balance text-sm opacity-50">
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+interface FoodItem {
+  id: string;
+  name: string;
+  icon: React.ReactNode;
 }
+
+interface Column {
+  id: string;
+  title: string;
+  items: FoodItem[];
+}
+
+type ColumnsState = {
+  [key: string]: Column;
+};
+
+interface DraggingState {
+  itemId: string;
+  columnId: string;
+}
+
+const foodItems: FoodItem[] = [
+  { id: 'carrot', name: 'にんじん', icon: <FaCarrot size={24} /> },
+  { id: 'apple', name: 'りんご', icon: <FaAppleAlt size={24} /> },
+  { id: 'fish', name: '魚', icon: <FaFish size={24} /> },
+  { id: 'egg', name: '卵', icon: <FaEgg size={24} /> },
+  { id: 'cheese', name: 'チーズ', icon: <FaCheese size={24} /> },
+  { id: 'bread', name: 'パン', icon: <FaBreadSlice size={24} /> },
+  { id: 'pepper', name: '唐辛子', icon: <FaPepperHot size={24} /> },
+  { id: 'lemon', name: 'レモン', icon: <FaLemon size={24} /> },
+  { id: 'coffee', name: 'コーヒー', icon: <FaCoffee size={24} /> },
+  { id: 'icecream', name: 'アイスクリーム', icon: <FaIceCream size={24} /> },
+  { id: 'meat', name: '肉', icon: <GiMeat size={24} /> },
+  { id: 'mushroom', name: 'きのこ', icon: <GiMushroomGills size={24} /> },
+  { id: 'tomato', name: 'トマト', icon: <GiTomato size={24} /> },
+  { id: 'potato', name: 'じゃがいも', icon: <GiPotato size={24} /> },
+  { id: 'corn', name: 'とうもろこし', icon: <GiCorn size={24} /> },
+  { id: 'avocado', name: 'アボカド', icon: <GiAvocado size={24} /> },
+  { id: 'chocolate', name: 'チョコレート', icon: <GiChocolateBar size={24} /> },
+  { id: 'honey', name: 'はちみつ', icon: <GiHoneycomb size={24} /> },
+  { id: 'strawberry', name: 'いちご', icon: <GiStrawberry size={24} /> },
+  { id: 'grapes', name: 'ぶどう', icon: <GiGrapes size={24} /> },
+];
+
+const initialColumns: ColumnsState = {
+  ingredients: {
+    id: 'ingredients',
+    title: '食材リスト',
+    items: foodItems,
+  },
+  recipe: {
+    id: 'recipe',
+    title: 'レシピの材料',
+    items: [],
+  }
+};
+
+const FoodKanbanBoard: React.FC = () => {
+  const [columns, setColumns] = useState<ColumnsState>(initialColumns);
+  const [dragging, setDragging] = useState<DraggingState | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const onDragStart = (e: DragEvent<HTMLDivElement>, itemId: string, columnId: string) => {
+    setDragging({ itemId, columnId });
+    e.dataTransfer.setData('text/plain', itemId);
+  };
+
+  const onDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const onDrop = (e: DragEvent<HTMLDivElement>, targetColumnId: string) => {
+    e.preventDefault();
+    const itemId = e.dataTransfer.getData('text');
+    if (!dragging) return;
+    const sourceColumnId = dragging.columnId;
+    if (sourceColumnId === targetColumnId) return;
+
+    setColumns(prevColumns => {
+      const sourceColumn = {...prevColumns[sourceColumnId]};
+      const targetColumn = {...prevColumns[targetColumnId]};
+      const itemIndex = sourceColumn.items.findIndex(item => item.id === itemId);
+      
+      if (itemIndex !== -1) {
+        const [movedItem] = sourceColumn.items.splice(itemIndex, 1);
+        targetColumn.items.push(movedItem);
+      }
+
+      return {
+        ...prevColumns,
+        [sourceColumnId]: sourceColumn,
+        [targetColumnId]: targetColumn
+      };
+    });
+
+    setDragging(null);
+  };
+
+  if (!isClient) {
+    return null; // または、ローディング表示
+  }
+
+  return (
+    <div className={styles.container}>
+      <Head>
+        <title>食材カンバンボード</title>
+        <meta name="description" content="食材をドラッグ＆ドロップで選択するカンバンボード" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <header className={styles.header}>
+        <h1 className={styles.headerTitle}>食材カンバンボード</h1>
+      </header>
+
+      <main className={styles.main}>
+        <div className={styles.board}>
+          {Object.values(columns).map((column) => (
+            <div 
+              key={column.id} 
+              className={styles.column}
+              onDragOver={onDragOver}
+              onDrop={(e) => onDrop(e, column.id)}
+            >
+              <h2 className={styles.columnTitle}>{column.title}</h2>
+              <div className={styles.itemGrid}>
+                {column.items.map((item) => (
+                  <div
+                    key={item.id}
+                    draggable
+                    onDragStart={(e) => onDragStart(e, item.id, column.id)}
+                    className={styles.item}
+                    title={item.name}
+                  >
+                    {item.icon}
+                  </div>
+                ))}
+              </div>
+              {column.id === 'recipe' && (
+                <div className={styles.selectedIngredients}>
+                  選択された材料: {column.items.map(item => item.name).join(', ')}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default FoodKanbanBoard;
