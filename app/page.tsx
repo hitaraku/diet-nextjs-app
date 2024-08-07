@@ -2,6 +2,8 @@
 
 import React, { useState, DragEvent, useEffect } from 'react';
 import Head from 'next/head';
+import axios from 'axios';
+
 import styles from '../styles/Home.module.css';
 import { 
   FaCarrot, FaAppleAlt, FaFish, FaEgg, FaCheese, FaBreadSlice, 
@@ -73,6 +75,8 @@ const FoodKanbanBoard: React.FC = () => {
   const [columns, setColumns] = useState<ColumnsState>(initialColumns);
   const [dragging, setDragging] = useState<DraggingState | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [recipe, setRecipe] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -114,18 +118,44 @@ const FoodKanbanBoard: React.FC = () => {
     setDragging(null);
   };
 
+  const generateRecipe = async () => {
+    const selectedIngredients = columns.recipe.items.map(item => item.name).join(', ');
+    if (selectedIngredients.length === 0) {
+      alert('食材を選んでください。');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/generate-recipe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ingredients: selectedIngredients }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`API error: ${errorData.error || response.statusText}`);
+      }
+
+      const data = await response.json();
+      setRecipe(data.recipe);
+    } catch (error) {
+      console.error('Recipe generation failed:', error);
+      setRecipe('レシピの生成に失敗しました。もう一度お試しください。');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   if (!isClient) {
-    return null; // または、ローディング表示
+    return null;
   }
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>食材カンバンボード</title>
-        <meta name="description" content="食材をドラッグ＆ドロップで選択するカンバンボード" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <header className={styles.header}>
         <h1 className={styles.headerTitle}>食材カンバンボード</h1>
       </header>
@@ -160,6 +190,23 @@ const FoodKanbanBoard: React.FC = () => {
               )}
             </div>
           ))}
+        </div>
+        
+        <div className={styles.recipeSection}>
+          <button 
+            onClick={generateRecipe} 
+            className={styles.generateButton} 
+            disabled={isLoading || columns.recipe.items.length === 0}
+          >
+            {isLoading ? 'レシピ生成中...' : 'ダイエットレシピを生成'}
+          </button>
+          
+          {recipe && (
+            <div className={styles.recipeContainer}>
+              <h3>生成されたレシピ:</h3>
+              <p>{recipe}</p>
+            </div>
+          )}
         </div>
       </main>
     </div>
